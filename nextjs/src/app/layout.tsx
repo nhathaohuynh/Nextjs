@@ -1,5 +1,6 @@
 import Header from '@/components/ui/header'
 import { ThemeProvider } from '@/components/ui/theme-provider'
+import { Toaster } from '@/components/ui/toaster'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -31,6 +32,7 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<div>{children}</div>
+					<Toaster />
 				</ThemeProvider>
 			</body>
 		</html>

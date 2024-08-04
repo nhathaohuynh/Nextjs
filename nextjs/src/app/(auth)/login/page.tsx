@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import LoginForm from './login-form'
 
 const loginSchema = z.object({
 	username: z.string().min(2, {
@@ -38,26 +39,12 @@ const Login = () => {
 		console.log(values)
 	}
 	return (
-		<Form {...formLogin}>
-			<form onSubmit={formLogin.handleSubmit(onSubmitLoginForm)}>
-				<FormField
-					control={formLogin.control}
-					name='username'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Username</FormLabel>
-							<FormControl>
-								<Input placeholder='Example: huynh nhat hao' {...field} />
-							</FormControl>
-
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<Button type='submit'>Login</Button>
-			</form>
-		</Form>
+		<section className=' p-16 rounded-md shadow-sm mt-10 border'>
+			<h1 className='text-3xl mb-8'>Login Account</h1>
+			<div>
+				<LoginForm />
+			</div>
+		</section>
 	)
 }
 

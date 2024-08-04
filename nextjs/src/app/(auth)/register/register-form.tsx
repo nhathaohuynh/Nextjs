@@ -26,7 +26,7 @@ const RegisterForm = () => {
 		},
 	})
 
-	const onSubmitLoginForm = async (values: RegisterBodyType) => {
+	const onSubmitRegisterForm = async (values: RegisterBodyType) => {
 		console.log(values)
 		const result = await fetch(
 			`${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/register`,
@@ -44,7 +44,7 @@ const RegisterForm = () => {
 	return (
 		<Form {...formRegister}>
 			<form
-				onSubmit={formRegister.handleSubmit(onSubmitLoginForm)}
+				onSubmit={formRegister.handleSubmit(onSubmitRegisterForm)}
 				className='flex flex-col gap-4 w-[300px] max-w-[400px]'
 			>
 				<FormField
