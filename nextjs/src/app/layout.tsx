@@ -3,7 +3,9 @@ import { ThemeProvider } from '@/components/ui/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Cookie, Inter } from 'next/font/google'
+import { cookies } from 'next/headers'
+import AppProvider from './app-provider'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -18,12 +20,12 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode
 }>) {
+	const cookieStores = cookies()
+	const sessionToken = cookieStores.get('session')?.value
 	return (
 		<html lang='en' suppressHydrationWarning>
 			<body
-				className={clsx(
-					`${inter.className} flex flex-col items-center justify-between max-w-[1290px] mx-auto p-3`,
-				)}
+				className={clsx(`${inter.className} max-w-[1290px] w-[1270px] mx-auto`)}
 			>
 				<ThemeProvider
 					attribute='class'
@@ -31,9 +33,11 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<div>{children}</div>
-					<Toaster />
+					<AppProvider initialSessionToken={sessionToken}>
+						{children}
+					</AppProvider>
 				</ThemeProvider>
+				<Toaster />
 			</body>
 		</html>
 	)

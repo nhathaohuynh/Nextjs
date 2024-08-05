@@ -1,5 +1,6 @@
 'use client'
 
+import { useAppContext } from '@/app/app-provider'
 import { LoginBody, LoginBodyType } from '@/app/schemas/auth.schema'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,8 +20,9 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 const LoginForm = () => {
 	const { toast } = useToast()
+	const { setSessionToken } = useAppContext()
 	const [loading, setLoading] = useState(false)
-	const registerForm = useForm<LoginBodyType>({
+	const loginForm = useForm<LoginBodyType>({
 		resolver: zodResolver(LoginBody),
 		defaultValues: {
 			email: '',
@@ -53,7 +55,18 @@ const LoginForm = () => {
 
 				return data
 			})
+
+			const resultFromNextServer = await fetch('/api/auth', {
+				method: 'POST',
+				body: JSON.stringify(result.payload),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}).then((res) => res.json())
 			setLoading(false)
+			loginForm.reset()
+			setSessionToken(resultFromNextServer.data.token)
+
 			toast({
 				title: 'Success',
 				description: result.payload.message,
@@ -69,7 +82,7 @@ const LoginForm = () => {
 
 			if (status === 422) {
 				errors.forEach((error) => {
-					registerForm.setError(error.field as 'email' | 'password', {
+					loginForm.setError(error.field as 'email' | 'password', {
 						message: error.message,
 					})
 				})
@@ -83,13 +96,13 @@ const LoginForm = () => {
 		}
 	}
 	return (
-		<Form {...registerForm}>
+		<Form {...loginForm}>
 			<form
-				onSubmit={registerForm.handleSubmit(onSubmitLoginForm)}
-				className='flex flex-col gap-4 w-[300px] max-w-[400px]'
+				onSubmit={loginForm.handleSubmit(onSubmitLoginForm)}
+				className='flex flex-col gap-4'
 			>
 				<FormField
-					control={registerForm.control}
+					control={loginForm.control}
 					name='email'
 					render={({ field }) => (
 						<FormItem>
@@ -107,7 +120,7 @@ const LoginForm = () => {
 				/>
 
 				<FormField
-					control={registerForm.control}
+					control={loginForm.control}
 					name='password'
 					render={({ field }) => (
 						<FormItem>

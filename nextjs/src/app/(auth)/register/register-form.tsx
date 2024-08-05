@@ -45,7 +45,7 @@ const RegisterForm = () => {
 		<Form {...formRegister}>
 			<form
 				onSubmit={formRegister.handleSubmit(onSubmitRegisterForm)}
-				className='flex flex-col gap-4 w-[300px] max-w-[400px]'
+				className='flex flex-col gap-4'
 			>
 				<FormField
 					control={formRegister.control}
